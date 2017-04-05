@@ -20,18 +20,7 @@ Class Index extends BaseController {
         //echo 'before_index<br/>';
     }
     public function test(){
-        $fileDir=LOG_DIR .date('Ymd').'/debug';
-        if(!is_dir($fileDir)){
-            mkdir("$fileDir",0644,true);
-        }
-        $fileDir=LOG_DIR .date('Ymd').'/info';
-        if(!is_dir($fileDir)){
-            mkdir("$fileDir",0644,true);
-        }
-        $fileDir=LOG_DIR .date('Ymd').'/error';
-        if(!is_dir($fileDir)){
-            mkdir("$fileDir",0644,true);
-        }
+        echo 11;
     }
     public function pdoTest(){
 

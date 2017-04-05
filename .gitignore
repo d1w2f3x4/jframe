@@ -1,0 +1,21 @@
+
+
+*.log
+
+.cache/*
+
+# vim
+*.sw[a-z]
+vim/.netrwhist
+
+# temp
+.DS_Store
+*.db
+*.bak
+*.tmp
+*.cmd
+~*
+/.idea/*
+/Runtime/Logs/*
+
+*.jdists
