@@ -23,7 +23,7 @@ use Thrift\ClassLoader\ThriftClassLoader;
 Class Index extends BaseController {
 
     public function test(){
-        dd(I());
+        dd(I('b','string','222'));
         echo 'I am test action!';
     }
 

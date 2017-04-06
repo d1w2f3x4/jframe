@@ -93,10 +93,29 @@ if ( ! function_exists('I')) {
     /**
      * 获取请求参数
      * @param string|若不传默认获取所有请求参数 $key 若不传默认获取所有请求参数
+     * @param string $type 参数类型 默认为string:字符串类型 可选：string、int、float、boolean、array
      * @param mixed $default 默认值 如果没有获取到key对应的值则使用default所设置的默认值
-     * @return mixed
+     * @return mixed 返回值会根据$type的值进行强转后返回
      */
-    function I($key='',$default=null){
-        return \JframeCore\Paramters::getParam($key,$default);
+    function I($key='',$type='string',$default=null){
+        $value=\JframeCore\Paramters::getParam($key,$default);
+        switch ($type){
+            case 'string':
+                $value=(string)$value;
+                break;
+            case 'int':
+                $value=(int)$value;
+                break;
+            case 'float':
+                $value=(float)$value;
+                break;
+            case 'boolean':
+                $value=(boolean)$value;
+                break;
+            case 'array':
+                $value=(array)$value;
+                break;
+        }
+        return $value;
     }
 }
