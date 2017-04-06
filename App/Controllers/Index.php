@@ -13,6 +13,7 @@ use JframeCore\BaseController;
 use JframeCore\Driver\PdoDriver;
 use JframeCore\Driver\PRedisDriver;
 use JframeCore\Driver\TestDriver;
+use JframeCore\FileUpload;
 use JframeCore\Log;
 use Predis\Autoloader;
 use Predis\Client;
@@ -24,6 +25,21 @@ Class Index extends BaseController {
         echo 'I am test action!';
     }
 
+    public function fileUploadTest(){
+        $up = new FileUpload();
+        //设置属性(上传的位置， 大小， 类型， 名是是否要随机生成)
+        $up -> set("path", RESOURCES_DIR.'/Uploads');
+        $up -> set("maxsize", 2000000);
+        $up -> set("allowtype", array("gif", "png", "jpg","jpeg"));
+        $up -> set("israndname", false);
+
+        //使用对象中的upload方法， 就可以上传文件， 方法需要传一个上传表单的名子 pic, 如果成功返回true, 失败返回false
+        if($up -> upload("pic")) {
+            dd($up->getFileName());
+        } else {
+            dd($up->getErrorMsg());
+        }
+    }
     public function redisTest(){
         $dsn='tcp://10.31.63.9:9007?database=2';
         $client=PRedisDriver::getClient($dsn);
