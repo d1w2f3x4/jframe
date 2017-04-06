@@ -92,10 +92,11 @@ if ( ! function_exists('dd')) {
 if ( ! function_exists('I')) {
     /**
      * 获取请求参数
-     * @param $key 若不传默认获取所有请求参数
+     * @param string|若不传默认获取所有请求参数 $key 若不传默认获取所有请求参数
+     * @param mixed $default 默认值 如果没有获取到key对应的值则使用default所设置的默认值
      * @return mixed
      */
-    function I($key=''){
-        return \JframeCore\Paramters::getParam($key);
+    function I($key='',$default=null){
+        return \JframeCore\Paramters::getParam($key,$default);
     }
 }

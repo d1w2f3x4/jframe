@@ -15,7 +15,7 @@ class Paramters
      * 设置请求参数
      * @throws \Exception
      */
-    public static function setParam(){
+    public static function init(){
         $post=$_POST?:[];
         $get=$_GET?:[];
         self::$jParam=array_merge($get,$post);
@@ -40,11 +40,33 @@ class Paramters
 
     /**
      * 获取请求参数
-     * @param $key 若不传默认获取所有请求参数
+     * @param 若不传默认获取所有请求参数|string $key 若不传默认获取所有请求参数
+     * @param mixed $default 默认值 如果没有获取到key对应的值则使用default所设置的默认值
      * @return mixed
      */
-    public static function getParam($key=''){
-        return self::$jParam;
+    public static function getParam($key='',$default=null){
+        if($key){
+            return array_key_exists($key,self::$jParam)?self::$jParam[$key]:$default;
+        }else{
+            return self::$jParam;
+        }
+    }
+
+    /**
+     * 修改参数
+     * @param $key
+     * @param $value
+     */
+    public static function updateParam($key,$value){
+        self::$jParam[$key]=$value;
+    }
+
+    /**
+     * 修改所有参数
+     * @param $arr
+     */
+    public static function updateAllParam($arr){
+        self::$jParam=$arr;
     }
 
 }

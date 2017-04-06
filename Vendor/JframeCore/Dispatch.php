@@ -8,7 +8,7 @@ namespace JframeCore;
 class Dispatch extends Base {
     public function run(){
         //设置请求参数
-        Paramters::setParam();
+        Paramters::init();
         $controller= '\App\Controllers\\'.CONTROLLER_NAME;
         $action=ACTION_NAME;
 

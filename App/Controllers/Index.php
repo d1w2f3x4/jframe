@@ -14,6 +14,7 @@ use JframeCore\Driver\PdoDriver;
 use JframeCore\Driver\PRedisDriver;
 use JframeCore\Driver\TestDriver;
 use JframeCore\FileUpload;
+use JframeCore\IMiddlewareAfter;
 use JframeCore\Log;
 use Predis\Autoloader;
 use Predis\Client;
@@ -22,6 +23,7 @@ use Thrift\ClassLoader\ThriftClassLoader;
 Class Index extends BaseController {
 
     public function test(){
+        dd(I());
         echo 'I am test action!';
     }
 
