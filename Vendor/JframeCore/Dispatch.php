@@ -12,20 +12,59 @@ class Dispatch extends Base {
         $controller= '\App\Controllers\\'.CONTROLLER_NAME;
         $action=ACTION_NAME;
 
-        $controller=new $controller();
-        //判断方法是否有前置方法，如果有则先执行前置方法
-        $before_action='before_'.$action;
-        if(method_exists($controller,$before_action)){
-            $controller->$before_action();
+        /*
+         * 判断是否有需要执行的中间件
+         */
+        $commonMap=Config::get('Middleware.commonMap');
+        $map=Config::get('Middleware.map');
+        $key=CONTROLLER_NAME.'/'.$action;
+        $middleware=Config::get('Middleware.middleware');
+        /*
+         * 执行前置拦截方法
+         */
+        foreach ($commonMap as $k){
+            $currentMiddleware=$middleware[$k];
+            $currentObj=ObjPool::getObj($currentMiddleware);
+            if(method_exists($currentObj,'j_before')){
+                $currentObj->j_before();
+            }
         }
+        if(array_key_exists($key,$map)){
+            $currentMap=$map[$key];
+            foreach ($currentMap as $k){
+                $currentMiddleware=$middleware[$k];
+                $currentObj=ObjPool::getObj($currentMiddleware);
+                if(method_exists($currentObj,'j_before')){
+                    $currentObj->j_before();
+                }
+            }
+        }
+
         //执行请求方法
+        $controller=new $controller();
         $controller->$action();
 
-        //判断方法是否有后置方法，如果有则先执行后置方法
-        $after_action='after_'.$action;
-        if(method_exists($controller,$after_action)){
-            $controller->$after_action();
+        /*
+        * 执行后置拦截方法
+        */
+        foreach ($commonMap as $k){
+            $currentMiddleware=$middleware[$k];
+            $currentObj=ObjPool::getObj($currentMiddleware);
+            if(method_exists($currentObj,'j_after')){
+                $currentObj->j_after();
+            }
         }
+        if(array_key_exists($key,$map)){
+            $currentMap=$map[$key];
+            foreach ($currentMap as $k){
+                $currentMiddleware=$middleware[$k];
+                $currentObj=ObjPool::getObj($currentMiddleware);
+                if(method_exists($currentObj,'j_after')){
+                    $currentObj->j_after();
+                }
+            }
+        }
+
     }
 
 }

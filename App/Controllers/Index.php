@@ -14,13 +14,12 @@ use JframeCore\Driver\TestDriver;
 use JframeCore\Log;
 use Thrift\ClassLoader\ThriftClassLoader;
 
-set_time_limit(600);
 Class Index extends BaseController {
     public function before_index(){
         //echo 'before_index<br/>';
     }
     public function test(){
-        echo 11;
+        dd('我是test方法');
     }
     public function pdoTest(){
 
