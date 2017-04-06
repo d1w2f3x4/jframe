@@ -6,18 +6,29 @@
  */
 namespace App\Controllers;
 
+use App\Lib\RedisClientHelper;
 use App\Models\TestModel;
 use App\Models\Tran;
 use JframeCore\BaseController;
 use JframeCore\Driver\PdoDriver;
+use JframeCore\Driver\PRedisDriver;
 use JframeCore\Driver\TestDriver;
 use JframeCore\Log;
+use Predis\Autoloader;
+use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
 
     public function test(){
-        dd('我是test方法');
+        echo 'I am test action!';
+    }
+
+    public function redisTest(){
+        $dsn='tcp://10.31.63.9:9007?database=2';
+        $client=PRedisDriver::getClient($dsn);
+        $info=$client->smembers('user:cluster:info');
+        dd($info);
     }
     public function pdoTest(){
 
