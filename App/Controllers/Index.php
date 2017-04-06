@@ -57,7 +57,6 @@ Class Index extends BaseController {
             $param=['阿猫',40];
             $param1=['阿狗',50];
             $result1=$tran->prepareExecute($sql,$param1);
-            throw new \RuntimeException('xxxxxxxxxx');
             $result=$testModel->prepareExecute($sql,$param);
 
             $testModel->commit();

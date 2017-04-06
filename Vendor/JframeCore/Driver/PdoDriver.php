@@ -10,7 +10,8 @@ use JframeCore\Log;
 use JframeCore\ObjPool;
 
 class PdoDriver extends Base {
-    protected $dsn;
+    protected $master_dsn;
+    protected $slave_dsn;
     protected $username;
     protected $password;
     protected $options;
@@ -24,24 +25,41 @@ class PdoDriver extends Base {
 
     /**
      * pdo驱动构造函数
-     * @param $dsn
+     * @param $dsn 主从读写分离则使用#分隔，默认第一个为主库，其他为从库
      * @param string $username
      * @param string $password
      * @param array $options
      */
     public function __construct($dsn,$username='',$password='',$options=[]) {
         parent::__construct();
-        $this->dsn=$dsn;
+        /*
+         * 主从读写分离处理
+         */
+        $dsnArr=explode('#',$dsn);
+        $this->master_dsn=$dsnArr[0];
+        unset($dsnArr[0]);
+        $this->slave_dsn=$dsnArr;
+
         $this->username=$username;
         $this->password=$password;
         $this->options =$options;
+        //默认为写连接 否则事务会出问题
         $this->pdo_connect();
     }
+
     /**
      * 创建pdo连接
+     * 根据是操作语句进行读写分离数据库连接
+     * @param bool $isQuery 是否是查询语句
      */
-    private function pdo_connect() {
-        $this->pdo = ObjPool::getObj('\PDO',[$this->dsn,$this->username,$this->password,$this->options]);
+    private function pdo_connect($isQuery=false) {
+        $dsn=$this->master_dsn;
+        if($isQuery && $this->slave_dsn){
+            //打乱顺序随机获取一个
+            shuffle($this->slave_dsn);
+            $dsn=$this->slave_dsn[0];
+        }
+        $this->pdo = ObjPool::getObj('\PDO',[$dsn,$this->username,$this->password,$this->options]);
         // 设置 PDO 错误模式为异常
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
@@ -54,14 +72,16 @@ class PdoDriver extends Base {
      * @return mixed 如果为查询语句则返回结果集数组，否则将返回影响条数
      */
     public function prepareExecute($sql,$paramArr){
-        $this->checkConnection();
-        $this->sql=$sql;
-        $this->bind=$paramArr;
+
         //判断是否为查询语句
         $isQuery=false;
         if(strtoupper(substr(trim($sql),0,6))=='SELECT' ){
             $isQuery=true;
         }
+        $this->pdo_connect($isQuery);
+        $this->sql=$sql;
+        $this->bind=$paramArr;
+
         $returnResult=[];
         $pdoStatement=$this->pdo->prepare($sql);
         if($pdoStatement){
@@ -227,14 +247,6 @@ class PdoDriver extends Base {
     }
 
 
-    /**
-     * 检查连接是否正常，如果不正常则重新连接
-     */
-    private function checkConnection(){
-        if(!$this->pdo){
-            $this->pdo_connect();
-        }
-
-    }
+   
 
 }
