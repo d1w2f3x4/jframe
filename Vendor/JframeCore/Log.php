@@ -97,46 +97,49 @@ class Log extends Base{
      * @param $filename 文件名
      */
     private  static function log_write($message,$data,$level,$filename){
-        try{
-            $filePath=LOG_DIR.'/';
-            switch ($level){
+        try {
+            $filePath = LOG_DIR . '/';
+            switch ($level) {
                 case 'sql':
-                    $filePath=$filePath.'sql/';
+                    $filePath = $filePath . 'sql/';
                     break;
                 case 'info':
-                    $filePath=$filePath.'info/';
+                    $filePath = $filePath . 'info/';
                     break;
                 case 'error':
-                    $filePath=$filePath.'error/';
+                    $filePath = $filePath . 'error/';
                     break;
                 case 'debug':
-                    $filePath=$filePath.'debug/';
+                    $filePath = $filePath . 'debug/';
                     break;
                 case 'system':
-                    $filePath=$filePath.'/';
+                    $filePath = $filePath . '/';
                     break;
             }
-            if(!is_dir($filePath)){
-                mkdir("$filePath",0644,true);
+            if (!is_dir($filePath)) {
+                mkdir("$filePath", 0644, true);
             }
-            $fileName=$filename.date('Y_m_d').'.log';
-            $fullFileName=$filePath.$fileName;
+            $fileName = $filename . date('Y_m_d') . '.log';
+            $fullFileName = $filePath . $fileName;
 
             //检测日志文件大小，超过配置大小则备份日志文件重新生成
-            if(is_file($fullFileName) && floor(Config::get('App.log_file_size')) <= filesize($fullFileName) ){
-                rename($fullFileName,dirname($fullFileName).'/'.time().'-'.basename($fullFileName));
+            if (is_file($fullFileName) && floor(Config::get('App.log_file_size')) <= filesize($fullFileName)) {
+                rename($fullFileName, dirname($fullFileName) . '/' . time() . '-' . basename($fullFileName));
             }
 
-            $reqDateTime=date('Y-m-d H:i:s',time());
+            $reqDateTime = date('Y-m-d H:i:s', time());
 
-            if(is_array($data)||is_object($data)){
-                $jsonData=json_encode($data,JSON_UNESCAPED_UNICODE);
+            if (is_array($data)) {
+                $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            } elseif ($data instanceof \Exception){
+                $jsonData=$data->getTraceAsString();
             }else{
                 $jsonData=$data;
             }
             $url=$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER['HTTP_HOST'].$_SERVER["REQUEST_URI"];
 
             $str='request time:'.$reqDateTime.
+                ' request serialNumber:'.SERIAL_NUMBER.
                 ' request url:'.$url.
                 ' record message:'.$message.
                 ' record data:';

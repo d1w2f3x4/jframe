@@ -15,9 +15,7 @@ use JframeCore\Log;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
-    public function before_index(){
-        //echo 'before_index<br/>';
-    }
+
     public function test(){
         dd('我是test方法');
     }
@@ -37,7 +35,7 @@ Class Index extends BaseController {
 
             $testModel->commit();
         }catch (\Exception $e){
-            dd($e);
+            Log::log_error($e->getMessage(),$e);
             $testModel->rollback();
         }
 
@@ -45,9 +43,7 @@ Class Index extends BaseController {
 
 
     }
-    public function after_index(){
-        //echo 'after_index<br/>';
-    }
+
 
 
 

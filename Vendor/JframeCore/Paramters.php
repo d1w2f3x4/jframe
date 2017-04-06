@@ -32,8 +32,10 @@ class Paramters
             throw new \Exception('路由错误!');
         }
         //将控制器名 方法名设为常量
-        define('CONTROLLER_NAME',$pathinfoArr[1]);
+        //控制器首字母大写
+        define('CONTROLLER_NAME',ucfirst($pathinfoArr[1]));
         define('ACTION_NAME',$pathinfoArr[2]);
+
     }
 
     /**

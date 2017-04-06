@@ -7,6 +7,7 @@
 namespace JframeCore\Driver;
 use JframeCore\Base;
 use JframeCore\Log;
+use JframeCore\ObjPool;
 
 class PdoDriver extends Base {
     protected $dsn;
@@ -40,7 +41,7 @@ class PdoDriver extends Base {
      * 创建pdo连接
      */
     private function pdo_connect() {
-        $this->pdo = new \PDO($this->dsn,$this->username,$this->password,$this->options);
+        $this->pdo = ObjPool::getObj('\PDO',[$this->dsn,$this->username,$this->password,$this->options]);
         // 设置 PDO 错误模式为异常
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
@@ -231,7 +232,7 @@ class PdoDriver extends Base {
      */
     private function checkConnection(){
         if(!$this->pdo){
-            $this->pdo_connect($this->dsn,$this->username,$this->password,$this->options);
+            $this->pdo_connect();
         }
 
     }

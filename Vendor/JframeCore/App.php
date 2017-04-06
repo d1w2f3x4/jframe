@@ -15,6 +15,9 @@ class App extends Base {
         //设置时区
         $timeZone=Config::get('App.timezone')?:'Asia/Shanghai';
         date_default_timezone_set($timeZone);
+        //生成流水号
+        $serial_number=str_replace('.','',microtime(true)).mt_rand(1000,9999);
+        define('SERIAL_NUMBER',$serial_number);
         //程序开始运行时间
         $this->start=microtime(true);
         //开启缓冲区
@@ -78,7 +81,7 @@ class App extends Base {
         if(Config::get('App.debug')){
             echo '<pre>'.$str.'</pre>';
         }
-        Log::log_system_warning('用户未捕获错误',$str);
+        Log::log_system_error('用户未捕获错误',$str);
         $this->jump();
     }
 
