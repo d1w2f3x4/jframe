@@ -9,6 +9,7 @@ namespace App\Controllers;
 use App\Lib\RedisClientHelper;
 use App\Models\TestModel;
 use App\Models\Tran;
+use HelloWorld\HelloWorldClient;
 use JframeCore\BaseController;
 use JframeCore\Driver\PdoDriver;
 use JframeCore\Driver\PRedisDriver;
@@ -23,7 +24,8 @@ use Thrift\ClassLoader\ThriftClassLoader;
 Class Index extends BaseController {
 
     public function test(){
-        dd(I('b','string','222'));
+        var_dump(I());
+
         echo 'I am test action!';
     }
 

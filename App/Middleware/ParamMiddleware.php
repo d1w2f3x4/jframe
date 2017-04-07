@@ -31,7 +31,7 @@ class ParamMiddleware implements IMiddlewareBefore
         $value=htmlspecialchars($value);
         });
 
-
+        Paramters::updateAllParam($allParams);
 
     }
 
