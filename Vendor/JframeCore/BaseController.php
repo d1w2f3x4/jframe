@@ -7,9 +7,6 @@
 namespace JframeCore;
 
 class BaseController extends Base {
-	
-	private $render = null;
-	private $assign = null;
 	private $smarty = null;
 
 	public function __construst() {
@@ -19,6 +16,7 @@ class BaseController extends Base {
 		include VENDOR_DIR . 'Smarty/Smarty.class.php';
 		$this->smarty = new \Smarty();
 		self::initSet();
+		var_dump($this->smarty);
 	}
 
 	/**

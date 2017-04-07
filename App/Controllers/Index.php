@@ -22,7 +22,16 @@ use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
+    public function __construst() {
+        parent::__construst();
+    }
+
     public function index(){
+
+        $this->assign('name','cooper');
+        $this->render('index');
+
+        echo 'sdasdasd';
         dd('Congratulations on you!');
     }
     public function test(){
