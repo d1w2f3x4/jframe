@@ -71,7 +71,7 @@ class PdoDriver extends Base {
      * @param $paramArr 预处理参数值组成的数组，顺序与问号顺序一一对应，若为二维数组则表示执行多组值不同的操作
      * @return mixed 如果为查询语句则返回结果集数组，否则将返回影响条数
      */
-    public function prepareExecute($sql,$paramArr){
+    public function prepareExecute($sql,$paramArr=[]){
 
         //判断是否为查询语句
         $isQuery=false;
@@ -85,7 +85,7 @@ class PdoDriver extends Base {
         $returnResult=[];
         $pdoStatement=$this->pdo->prepare($sql);
         if($pdoStatement){
-            if(is_array($paramArr[0])){
+            if(array_key_exists(0,$paramArr) && is_array($paramArr[0])){
                 foreach ($paramArr as $arr){
                     $boolResult=$pdoStatement->execute($arr);
                     if($boolResult){
@@ -246,6 +246,12 @@ class PdoDriver extends Base {
         return rtrim($sql);
     }
 
+    /**
+     * 销毁连接
+     */
+    public function close(){
+        $this->pdo=null;
+    }
 
 
 

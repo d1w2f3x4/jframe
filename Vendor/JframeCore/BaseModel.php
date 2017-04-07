@@ -13,4 +13,9 @@ class BaseModel extends PdoDriver {
         parent::__construct($dsn?:Config::get('Db.db_dsn'),$username?:Config::get('Db.db_username'),$password?:Config::get('Db.db_password'),$options);
     }
 
+    function __destruct()
+    {
+        parent::close();
+    }
+
 }

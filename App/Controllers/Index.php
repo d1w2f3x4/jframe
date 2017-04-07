@@ -22,9 +22,14 @@ use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
-
+    public function index(){
+        dd('Congratulations on you!');
+    }
     public function test(){
-        var_dump(I());
+        $testModel=new TestModel();
+        $sql='select  * from user ';
+        $return=$testModel->prepareExecute($sql,[]);
+        dd($return);
 
         echo 'I am test action!';
     }
