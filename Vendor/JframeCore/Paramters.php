@@ -17,15 +17,9 @@ class Paramters
      */
     public static function init(){
         $post=$_POST?:[];
-        $get=$_GET?:[];
-        self::$jParam=array_merge($get,$post);
+        self::$jParam=$post;
         $pathinfo=$_SERVER['REQUEST_URI'];
-        //如果有？则去掉问号后面的
-        $pos=strpos($pathinfo,'?');
-        $pos===false?:$pathinfo=substr($pathinfo,0,$pos);
-        if(array_key_exists($pathinfo,self::$jParam)){
-            unset(self::$jParam[$pathinfo]);
-        }
+
         //解析获得controller、action及其他参数
         $pathinfoArr=explode('/',$pathinfo);
         if(empty($pathinfoArr[1])){
@@ -38,6 +32,15 @@ class Paramters
         //控制器首字母大写
         define('CONTROLLER_NAME',ucfirst($pathinfoArr[1]));
         define('ACTION_NAME',$pathinfoArr[2]);
+        $pathinfoArr=array_slice($pathinfoArr,3);
+        $count=count($pathinfoArr);
+        for ($i = 0; $i <= $count; $i += 2) {
+            if (empty($pathinfoArr[$i]) || empty($pathinfoArr[$i + 1])) {
+                continue;
+            }
+            self::$jParam[$pathinfoArr[$i]]=$pathinfoArr[$i+1];
+
+        }
 
     }
 
