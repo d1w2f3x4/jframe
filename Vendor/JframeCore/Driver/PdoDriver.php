@@ -166,7 +166,7 @@ class PdoDriver extends Base {
     {
         $startTime=microtime(true);
         $sql=$sql?:$this->getLastSql();
-        dd('sqlDebugSql: '.$sql);
+//        dd('sqlDebugSql: '.$sql);
         if(0 === stripos(trim($sql), 'select')){
             $result=$this->getExplain($sql,$outputLocation);
         }
@@ -221,7 +221,7 @@ class PdoDriver extends Base {
     private function getRealSql($sql, array $bind = [])
     {
         $lastBind='';
-        if(is_array($bind[0])){
+        if(array_key_exists(0,$bind) && is_array($bind[0])){
             $size=count($bind);
             $lastBind=$bind[$size-1];
         }else{
