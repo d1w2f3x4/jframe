@@ -11,6 +11,7 @@ class Dispatch extends Base {
         Paramters::init();
         $controller= '\App\Controllers\\'.CONTROLLER_NAME;
         $action=ACTION_NAME;
+
         /*
          * 判断是否有需要执行的中间件
          */
