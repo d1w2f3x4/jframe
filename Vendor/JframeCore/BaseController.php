@@ -9,14 +9,13 @@ namespace JframeCore;
 class BaseController extends Base {
 	private $smarty = null;
 
-	public function __construst() {
+	public function __construct() {
 		
 		parent::__construct();
 		
-		include VENDOR_DIR . 'Smarty/Smarty.class.php';
+		include JFRAME_DIR . 'Smarty/Smarty.class.php';
 		$this->smarty = new \Smarty();
 		self::initSet();
-		var_dump($this->smarty);
 	}
 
 	/**
@@ -36,12 +35,14 @@ class BaseController extends Base {
 	/**
 	 * 模板渲染
 	 * @param $tpl_path string 模板路径：'Index/test'
-	 * @param $type boolean 模板类型 默认使用smarty,如果使用原生则需要传递页面数据到第三个参数
 	 * @param $tpl_data array 页面数据
 	 */
-	public function render($tpl_path,$type = true,$tpl_data = array()) {
+	public function render($tpl_path,$tpl_data = array()) {
+		
+		$type = Config::get('Smarty.USE_SMARTY');
+		
 		if($type) {
-			$this->smarty->display($tpl_path . 'html');
+			$this->smarty->display($tpl_path . '.html');
 		} else {
 			extract($tpl_data);
 			include VIEWS_DIR . $tpl_path . '.html';
