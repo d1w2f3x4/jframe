@@ -39,6 +39,13 @@ Class Index extends BaseController {
 
         echo 'I am test action!';
     }
+	public function smarty() {
+		$arr = array('red','green','black','white');
+		$name = 'coper';
+		$this->assign('color',$arr);
+		$this->assign('name',$name);
+		$this->render('Index/test_smarty');
+	}
 
     public function fileUploadTest(){
         $up = new FileUpload();
