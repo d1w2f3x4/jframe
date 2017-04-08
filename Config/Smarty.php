@@ -14,7 +14,7 @@ return [
 
 
     'DEBUGGING' => TRUE,             //开启debug
-    'CACHING' => TRUER,              //开启缓存
+    'CACHING' => TRUE,              //开启缓存
     'CACHE_LIFETIME' => 120,         //缓存时间
 
     'LEFT_DELIMITER' => '<{',

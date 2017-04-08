@@ -22,9 +22,6 @@ use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
-    public function __construst() {
-        parent::__construst();
-    }
 
     public function index(){
 

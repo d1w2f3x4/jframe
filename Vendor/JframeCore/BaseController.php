@@ -9,11 +9,11 @@ namespace JframeCore;
 class BaseController extends Base {
 	private $smarty = null;
 
-	public function __construst() {
+	public function __construct() {
 		
 		parent::__construct();
 		
-		include VENDOR_DIR . 'Smarty/Smarty.class.php';
+		include JFRAME_DIR . 'Smarty/Smarty.class.php';
 		$this->smarty = new \Smarty();
 		self::initSet();
 		var_dump($this->smarty);
