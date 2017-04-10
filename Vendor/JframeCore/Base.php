@@ -6,14 +6,9 @@
  */
 namespace JframeCore;
 class Base{
-    //请求参数
-    protected $jparam;
-
 
     public function __construct()
     {
-        //引入全局函数
-        include JFRAME_DIR.'/Helper.php';
     }
 
 }

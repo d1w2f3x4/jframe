@@ -287,6 +287,7 @@ class FileUpload
         if(!$this->errorNum) {
             $path = rtrim($this->path, '/').'/';
             $path .= $this->newFileName;
+            $path=iconv("UTF-8", "GBK", $path);
             if (@move_uploaded_file($this->tmpFileName, $path)) {
                 return true;
             }else{

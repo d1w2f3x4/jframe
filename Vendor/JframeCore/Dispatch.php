@@ -9,6 +9,9 @@ class Dispatch extends Base {
     public function run(){
         //设置请求参数
         Paramters::init();
+        //引入全局函数
+        include JFRAME_DIR.'/Helper.php';
+
         $controller= '\App\Controllers\\'.CONTROLLER_NAME;
         $action=ACTION_NAME;
 

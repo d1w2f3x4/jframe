@@ -17,5 +17,6 @@ vim/.netrwhist
 ~*
 /.idea/*
 /Runtime/Logs/*
+/Runtime/Tpl_compile/*
 
 *.jdists
