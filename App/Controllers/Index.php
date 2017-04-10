@@ -22,7 +22,7 @@ use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
 
 Class Index extends BaseController {
-
+    
     public function index(){
 
         $this->assign('name','cooper');
@@ -38,6 +38,23 @@ Class Index extends BaseController {
         dd($return);
 
         echo 'I am test action!';
+    }
+    public function benchmarkTest(){
+        benchmark_iterate(function(){
+            $amount=100;
+            for ($i=0; $i < $amount; $i++) {
+                for ($i=0; $i < 100; $i++) {
+                }
+            }
+        },100);
+
+
+        //前提benchmarkMiddleware 中间件开启
+        sleep(1);
+        benchmark_timer_mark('标记1');
+        sleep(1);
+        benchmark_timer_mark('标记2');
+
     }
 	public function smarty() {
 		$arr = array('red','green','black','white');

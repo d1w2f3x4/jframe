@@ -9,13 +9,13 @@ return [
      * 配置所有方法均要使用的中间件
      * 执行优先级commonMap高于map
      */
-    'commonMap'=>[1],
+    'commonMap'=>[1,2],
     /*
      * 配置方法需要使用的中间件
      */
 
     'map'=>[
-        'Index/test'=>[2],
+        'Index/test'=>[3],
     ],
     /*
      * 中间件配置
@@ -25,7 +25,9 @@ return [
     'middleware'=>[
         //过滤请求参数中间件
         1=>'App\Middleware\ParamMiddleware',
+        //benchmark调试中间件
+        2=>'App\Middleware\BenchmarkMiddleware',
         //测试中间件
-        2=>'App\Middleware\TestMiddleware',
+        3=>'App\Middleware\TestMiddleware',
     ],
 ];

@@ -101,3 +101,61 @@ if ( ! function_exists('I')) {
         return $value;
     }
 }
+if ( ! function_exists('benchmark_timer_start')) {
+    /**
+     * benchmark 时间记录开始<br/>
+     * 只针对debug模式有效
+     */
+    function benchmark_timer_start()
+    {
+        if (\JframeCore\Config::get('App.debug')) {
+            require JFRAME_DIR . '/Benchmark/Benchmark_Timer_Class.php';
+            $timer = \JframeCore\ObjPool::getObj('benchmark_timer', [], new \Benchmark_Timer_Class());
+            $timer->start();
+        }
+    }
+}
+if ( ! function_exists('benchmark_timer_stop')) {
+    /**
+     * benchmark 时间记录结束并输出到屏幕<br/>
+     * 只针对debug模式
+     */
+    function benchmark_timer_stop()
+    {
+        if (\JframeCore\Config::get('App.debug') && \JframeCore\ObjPool::objExist('benchmark_timer', [])) {
+            $timer = \JframeCore\ObjPool::getObj('benchmark_timer', []);
+            $timer->stop();
+            $timer->display();
+        }
+    }
+}
+if ( ! function_exists('benchmark_timer_mark')) {
+    /**
+     * benchmark 时间记录锚点注入<br/>
+     * 只针对debug模式
+     * @param $markName 锚点名称
+     */
+    function benchmark_timer_mark($markName)
+    {
+        if (\JframeCore\Config::get('App.debug') && \JframeCore\ObjPool::objExist('benchmark_timer', [])) {
+            $timer = \JframeCore\ObjPool::getObj('benchmark_timer', []);
+            $timer->setMarker($markName);
+        }
+    }
+}
+if ( ! function_exists('benchmark_iterate')) {
+    /**
+     * benchmark 对单一闭包函数执行指定次数计算每次运行时间
+     * @param Closure $func 闭包函数
+     * @param $count 需要执行的次数
+     * @internal param 需要执行的函数 $func
+     */
+    function benchmark_iterate(Closure $func,$count){
+        if(\JframeCore\Config::get('App.debug')){
+            require_once JFRAME_DIR."/Benchmark/Benchmark_Iterate.php";
+            $bench = new \Benchmark_Iterate();
+            $bench->run($count,$func);
+            dd($bench->get());
+        }
+    }
+}
