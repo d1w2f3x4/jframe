@@ -8,5 +8,9 @@ namespace App\Models;
 use JframeCore\BaseModel;
 
 class TestModel extends BaseModel {
-
+    public function test(){
+        $sql='select  * from user ';
+        $return=$this->prepareExecute($sql,[]);
+        return $return;
+    }
 }

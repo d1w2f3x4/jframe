@@ -17,6 +17,7 @@ use JframeCore\Driver\TestDriver;
 use JframeCore\FileUpload;
 use JframeCore\IMiddlewareAfter;
 use JframeCore\Log;
+use JframeCore\ObjPool;
 use Predis\Autoloader;
 use Predis\Client;
 use Thrift\ClassLoader\ThriftClassLoader;
@@ -24,6 +25,8 @@ use Thrift\ClassLoader\ThriftClassLoader;
 Class Index extends BaseController {
     
     public function index(){
+        echo date('Y-m-d H:i:s','1490101145');
+var_dump(time());exit;
 
         $this->assign('name','cooper');
         $this->render('index');
@@ -32,6 +35,12 @@ Class Index extends BaseController {
         dd('Congratulations on you!');
     }
     public function test(){
+        $result=ObjPool::getResult('\App\Models\TestModel',[],'test',1,0);
+        dd($result);
+        exit;
+
+
+
         $testModel=new TestModel();
         $sql='select  * from user ';
         $return=$testModel->prepareExecute($sql,[]);

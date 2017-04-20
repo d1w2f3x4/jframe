@@ -110,6 +110,7 @@ if ( ! function_exists('benchmark_timer_start')) {
     {
         if (\JframeCore\Config::get('App.debug')) {
             require JFRAME_DIR . '/Benchmark/Benchmark_Timer_Class.php';
+            /** @var Benchmark_Timer_Class $timer */
             $timer = \JframeCore\ObjPool::getObj('benchmark_timer', [], new \Benchmark_Timer_Class());
             $timer->start();
         }
@@ -123,6 +124,7 @@ if ( ! function_exists('benchmark_timer_stop')) {
     function benchmark_timer_stop()
     {
         if (\JframeCore\Config::get('App.debug') && \JframeCore\ObjPool::objExist('benchmark_timer', [])) {
+            /** @var Benchmark_Timer_Class $timer */
             $timer = \JframeCore\ObjPool::getObj('benchmark_timer', []);
             $timer->stop();
             $timer->display();
@@ -138,6 +140,7 @@ if ( ! function_exists('benchmark_timer_mark')) {
     function benchmark_timer_mark($markName)
     {
         if (\JframeCore\Config::get('App.debug') && \JframeCore\ObjPool::objExist('benchmark_timer', [])) {
+            /** @var Benchmark_Timer_Class $timer */
             $timer = \JframeCore\ObjPool::getObj('benchmark_timer', []);
             $timer->setMarker($markName);
         }

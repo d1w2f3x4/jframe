@@ -70,9 +70,9 @@ Class ObjPool{
     /**
      * 将对象池中所有对象销毁掉
      */
-        public static function destoryAllObj(){
-            self::$objPool=[];
-        }
+    public static function destoryAllObj(){
+        self::$objPool=[];
+    }
 
     /**
      * 生成key
@@ -80,8 +80,87 @@ Class ObjPool{
      * @param array $paramArr 创建对象时需要传的参数组成的数组
      * @return string
      */
-        private static function generateKey($fullyQualifiedName,$paramArr=[]){
-            $key=$fullyQualifiedName.json_encode($paramArr);
-            return $key;
-        }
+    private static function generateKey($fullyQualifiedName,$paramArr=[]){
+        $key=$fullyQualifiedName.json_encode($paramArr);
+        return $key;
+    }
+
+    /**
+     * 创建对象并执行对象方法(执行方法所需要的参数直接跟在最后面传入，暂时最多只支持5个)返回执行结果<br/>
+     * 本方法自动进行异常捕获及重试
+     * @param string $fullyQualifiedName 类的完全限定名，包含完整的命名空间 示例：\Task\TaskUserRuleModule
+     * @param array $paramArr 创建对象时需要传的参数组成的数组
+     * @param string $method 要执行的方法
+     * @param int $retryCount 重试次数 负数-1表示无限次重试
+     * @param int $retryFrequency 重试间隔单位秒
+     * @return  返回方法执行结果
+     * @throws \Exception 当进行$retryCount次重试后如果仍然有异常则将异常抛出以便业务捕获进行针对性业务处理
+     */
+    public static function getResult($fullyQualifiedName,$paramArr=[],$method='',$retryCount=3,$retryFrequency=0){
+        //重试标记
+        $retryFlag=false;
+        do{
+            //如果需要重试则sleep一段时间再重试
+            if($retryFlag){
+                sleep($retryFrequency);
+            }
+            try{
+                $obj=self::getObj($fullyQualifiedName,$paramArr);
+                /*
+                 * 既要用对象池又要支持多个参数暂时只能用这么笨的办法，如果不用对象池则可以直接用反射传入数组即可
+                 */
+                $methodParamCount=func_num_args()-5;
+                $methodParamArr=array_slice(func_get_args(),5);
+
+                switch ($methodParamCount){
+                    case 0:
+                        $result=$obj->$method();
+                        throw new \RuntimeException();
+                        break;
+                    case 1:
+                        $result=$obj->$method($methodParamArr[0]);
+                        break;
+                    case 2:
+                        $result=$obj->$method($methodParamArr[0],$methodParamArr[1]);
+                        break;
+                    case 3:
+                        $result=$obj->$method($methodParamArr[0],$methodParamArr[1],$methodParamArr[2]);
+                        break;
+                    case 4:
+                        $result=$obj->$method($methodParamArr[0],$methodParamArr[1],$methodParamArr[2],$methodParamArr[3]);
+                        break;
+                    case 5:
+                        $result=$obj->$method($methodParamArr[0],$methodParamArr[1],$methodParamArr[2],$methodParamArr[3],$methodParamArr[4]);
+                        break;
+                }
+
+                //重置重试标记
+                $retryFlag=false;
+                return $result;
+            }catch (\Exception $e){
+                echo $retryCount;
+                /*
+                 * 如果捕获到异常可能是对象的连接中断了，需要将对象池中原有的对象销毁重新生成并重试本次操作
+                 */
+                if($retryCount==0){
+                    //重试次数为0表示不再重试
+                    $retryFlag=false;
+                    //将异常抛出以便业务捕获做后续个性化业务处理
+                    /** @var \Exception $e */
+                    throw $e;
+                }else{
+                    //重试次数为正则按照该数值进行$retryCount次重试
+                    $retryFlag=true;
+                    $retryCount--;
+                }
+
+                //异常记录
+                Log::log_error($e->getMessage(),$e);
+                //销毁对象
+                ObjPool::destoryObj($fullyQualifiedName,$paramArr);
+
+            }
+        }while($retryFlag);
+
+    }
 }
