@@ -91,8 +91,8 @@ Class ObjPool{
      * @param string $fullyQualifiedName 类的完全限定名，包含完整的命名空间 示例：\Task\TaskUserRuleModule
      * @param array $paramArr 创建对象时需要传的参数组成的数组
      * @param string $method 要执行的方法
-     * @param int $retryCount 重试次数 负数-1表示无限次重试
-     * @param int $retryFrequency 重试间隔单位秒
+     * @param int $retryCount 重试次数 负数-1表示无限次重试 默认重试三次
+     * @param int $retryFrequency 重试间隔单位秒 默认为0：无间隔执行
      * @return  返回方法执行结果
      * @throws \Exception 当进行$retryCount次重试后如果仍然有异常则将异常抛出以便业务捕获进行针对性业务处理
      */
@@ -115,7 +115,6 @@ Class ObjPool{
                 switch ($methodParamCount){
                     case 0:
                         $result=$obj->$method();
-                        throw new \RuntimeException();
                         break;
                     case 1:
                         $result=$obj->$method($methodParamArr[0]);
