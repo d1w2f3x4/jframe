@@ -5,16 +5,14 @@
  * Description:
  */
 namespace JframeCore;
-use JframeCore\Base;
-use JframeCore\Config;
 
 class Log extends Base{
     private static $buffer=[];
     /**
      * info级别日志记录<br/>
      * 仅在log_info配置为true时记录
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_info($message,$data,$filename=''){
@@ -25,8 +23,8 @@ class Log extends Base{
     /**
      * sql级别日志记录<br/>
      * 仅在log_sql配置为true时记录
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_sql($message,$data,$filename=''){
@@ -37,8 +35,8 @@ class Log extends Base{
     /**
      * debug级别日志记录<br/>
      * 仅在debug模式下记录 即配置debug为true
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_debug($message,$data,$filename=''){
@@ -49,8 +47,8 @@ class Log extends Base{
     /**
      * error级别日志记录<br/>
      * 仅在log_error配置为true时记录
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_error($message,$data,$filename=''){
@@ -61,8 +59,8 @@ class Log extends Base{
     /**
      * system info级别日志记录<br/>
      * 仅供框架调用
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_system_info($message,$data='',$filename='Jframe'){
@@ -71,8 +69,8 @@ class Log extends Base{
  /**
      * system error级别日志记录<br/>
      * 仅供框架调用
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_system_error($message,$data='',$filename='Jframe'){
@@ -81,8 +79,8 @@ class Log extends Base{
  /**
      * system warning级别日志记录<br/>
      * 仅供框架调用
-     * @param $message 日志简述
-     * @param $data 日志内容
+     * @param string $message 日志简述
+     * @param mixed $data 日志内容
      * @param string $filename 日志文件名 不传则默认以日期命名
      */
     public static function log_system_warning($message,$data='',$filename='Jframe'){
@@ -94,7 +92,7 @@ class Log extends Base{
      * @param string $message 提示信息
      * @param mixed $data 日志内容
      * @param string $level 日志级别 可选 info,error,debug,sql
-     * @param $filename 文件名
+     * @param string $filename 文件名
      */
     private  static function log_write($message,$data,$level,$filename){
         try {
@@ -155,8 +153,8 @@ class Log extends Base{
 
     /**
      * 将日志写入缓存
-     * @param $fileName 要写入的文件名
-     * @param $logStr 要写入的日志信息
+     * @param string $fileName 要写入的文件名
+     * @param string $logStr 要写入的日志信息
      */
     public static function log_buffer($fileName,$logStr){
         self::$buffer[$fileName][]=$logStr;
@@ -191,62 +189,5 @@ class Log extends Base{
 
         }
     }
-    /*
-     * 日志自动删除
-     * 在规定的时间段内访问则触发删除规定天数(暂定为3天)前的日志
-     */
-    private static  function log_delLog($count=3){
-        $time=time();
-        $start=strtotime(date('Y-m-d').' 23:00:00');
-        $end=strtotime(date('Y-m-d').' 23:59:59');
 
-        /*
-         * 如果访问时间在当天的23点之后则触发删除日志
-         */
-        if($time>$start && $time<$end){
-            /*
-             * 删除白名单
-             */
-            $whiteArr[]=date('Ymd').'.log';
-            $whiteArr[]=date('y_m_d').'.log';
-            for ($i=0;$i<$count;$i++){
-                $whiteArr[]=date('Ymd',strtotime('-'.$i.' day')).'.log';
-                $whiteArr[]=date('y_m_d',strtotime('-'.$i.' day')).'.log';
-            }
-            self::log_deldir(LOG_DIR.'/Logs/',$whiteArr);
-        }
-    }
-    /**
-     * 递归删除目录下的文件
-     * @param string $dir 文件夹路径
-     * @param array $whiteArr 文件白名单(文件名以白名单结尾的文件)
-     */
-    private static function log_deldir($dir,$whiteArr=[])
-    {
-        try {
-            //删除目录下的文件：
-            $dh=opendir($dir);
-
-            while ($file=readdir($dh))
-            {
-                if($file!="." && $file!=".." && !in_array(substr($file, -12), $whiteArr))
-                {
-                    $fullpath=$dir."/".$file;
-                    if(!is_dir($fullpath))
-                    {
-                        unlink($fullpath);
-                    }
-                    else
-                    {
-                        self::log_deldir($fullpath,$whiteArr);
-                    }
-                }
-            }
-
-        }catch (\Exception $e){
-            //不做处理
-        }finally {
-            closedir($dh);
-        }
-    }
 }

@@ -46,7 +46,7 @@ class Paramters
 
     /**
      * 获取请求参数
-     * @param 若不传默认获取所有请求参数|string $key 若不传默认获取所有请求参数
+     * @param string $key 若不传默认获取所有请求参数
      * @param mixed $default 默认值 如果没有获取到key对应的值则使用default所设置的默认值
      * @return mixed
      */

@@ -16,7 +16,7 @@ class App extends Base {
         $timeZone=Config::get('App.timezone')?:'Asia/Shanghai';
         date_default_timezone_set($timeZone);
         //生成流水号
-        $serial_number=str_replace('.','',microtime(true)).mt_rand(1000,9999);
+        $serial_number= uniqid('',true);
         define('SERIAL_NUMBER',$serial_number);
         //程序开始运行时间
         $this->start=microtime(true);
@@ -89,7 +89,7 @@ class App extends Base {
      * 出现异常时调用
      * @param $exception
      */
-    public function exceptionHandler($exception){
+    public function exceptionHandler(\Exception $exception){
         if(Config::get('App.debug')){
             echo '<pre>';
             var_export($exception);

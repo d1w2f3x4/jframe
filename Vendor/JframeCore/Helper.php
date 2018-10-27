@@ -64,6 +64,7 @@ if ( ! function_exists('array_depth')) {
         if (!is_array($arr)) {
             return 0;
         }
+        return 0;
     }
 }
 if ( ! function_exists('dd')) {
@@ -92,7 +93,7 @@ if ( ! function_exists('dd')) {
 if ( ! function_exists('I')) {
     /**
      * 获取请求参数
-     * @param string|若不传默认获取所有请求参数 $key 若不传默认获取所有请求参数
+     * @param string $key 若不传默认获取所有请求参数 $key 若不传默认获取所有请求参数
      * @param mixed $default 默认值 如果没有获取到key对应的值则使用default所设置的默认值
      * @return mixed 返回值会根据$type的值进行强转后返回
      */
@@ -135,7 +136,7 @@ if ( ! function_exists('benchmark_timer_mark')) {
     /**
      * benchmark 时间记录锚点注入<br/>
      * 只针对debug模式
-     * @param $markName 锚点名称
+     * @param string $markName 锚点名称
      */
     function benchmark_timer_mark($markName)
     {
@@ -150,7 +151,7 @@ if ( ! function_exists('benchmark_iterate')) {
     /**
      * benchmark 对单一闭包函数执行指定次数计算每次运行时间
      * @param Closure $func 闭包函数
-     * @param $count 需要执行的次数
+     * @param int $count 需要执行的次数
      * @internal param 需要执行的函数 $func
      */
     function benchmark_iterate(Closure $func,$count){

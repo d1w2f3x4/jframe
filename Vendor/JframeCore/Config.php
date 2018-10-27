@@ -41,7 +41,6 @@ Class Config  {
      * 设置配置信息
      * @param string $param 需要设置的配置，格式“文件名.key” 示例：App.host 表示设置Config目录下App.php配置文件中key为host的值
      * @param mixed $value 需要设置的值
-     * @return mixed
      */
     public static function set($param,$value){
         $arr=explode('.',$param);

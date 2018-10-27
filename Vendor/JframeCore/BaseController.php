@@ -7,6 +7,7 @@
 namespace JframeCore;
 
 class BaseController extends Base {
+    /** @var null|\Smarty  */
 	private $smarty = null;
 
 	public function __construct() {

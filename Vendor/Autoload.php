@@ -7,7 +7,7 @@
 /*
  * 配置需要自动加载的目录
  */
-$autoloadConf= include ROOT_DIR . '/Config/Autoload.php';
+$autoloadConf= include ROOT_DIR . '/Config/SysConfig/AutoloadConfig.php';
 $include_dir = $autoloadConf['common'];
 
 //设置自动加载目录
@@ -26,7 +26,7 @@ function auto_load_class($class = '')
     if(is_file($path)){
         include_once($path);
     }else{
-        $autoloadConf= include '../Config/Autoload.php';
+        $autoloadConf= include '../Config/SysConfig/AutoloadConfig.php';
         $map=$autoloadConf['map'];
         if($map){
             //最后一个\处截取

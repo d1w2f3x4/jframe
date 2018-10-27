@@ -150,7 +150,6 @@ class FileUpload
 
     /**
      * 获取上传后的文件名称
-     * @param	void	 没有参数
      * @return	string 	上传后，新文件的名称， 如果是多文件上传返回数组
      */
     public function getFileName(){
@@ -159,7 +158,6 @@ class FileUpload
 
     /**
      * 上传失败后，调用该方法则返回，上传出错信息
-     * @param	void	 没有参数
      * @return	string 	 返回上传文件出错的信息报告，如果是多文件上传返回数组
      */
     public function getErrorMsg(){
@@ -170,7 +168,7 @@ class FileUpload
      * 设置上传出错信息
      */
     private function getError() {
-        $str = "上传文件<font color='red'>{$this->originName}</font>时出错 : ";
+        $str = "上传文件<label style='color: red'>{$this->originName}</label>时出错 : ";
         switch ($this->errorNum) {
             case 4: $str .= "没有文件被上传"; break;
             case 3: $str .= "文件只有部分被上传"; break;

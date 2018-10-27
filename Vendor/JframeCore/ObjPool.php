@@ -55,7 +55,7 @@ Class ObjPool{
 
     /**
      * 判断对象池中是该对象是否已经存在
-     * @param $fullyQualifiedName 类的完全限定名
+     * @param string $fullyQualifiedName 类的完全限定名
      * @param array $paramArr 创建对象时需要传的参数组成的数组
      * @return bool
      */
@@ -93,7 +93,7 @@ Class ObjPool{
      * @param string $method 要执行的方法
      * @param int $retryCount 重试次数 负数-1表示无限次重试 默认重试三次
      * @param int $retryFrequency 重试间隔单位秒 默认为0：无间隔执行
-     * @return  返回方法执行结果
+     * @return  mixed 返回方法执行结果
      * @throws \Exception 当进行$retryCount次重试后如果仍然有异常则将异常抛出以便业务捕获进行针对性业务处理
      */
     public static function getResult($fullyQualifiedName,$paramArr=[],$method='',$retryCount=3,$retryFrequency=0){
